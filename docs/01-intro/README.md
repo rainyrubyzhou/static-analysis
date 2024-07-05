@@ -73,54 +73,54 @@ $$
 
 其中，
 
--  Sound 的静态分析保证了完全性，妥协了正确性，会过近似（Overapproximate）程序的行为，因此会出现假积极（False Positive）的现象，即判定为积极，但实际是消极的。反映在现实场景中即为误报问题。
+-  Sound 的静态分析保证了完全性，妥协了正确性，会过近似（Overapproximate）程序的行为，因此会出现假阳性（False Positive）的现象，即判定为阳性，但实际是阴性的。反映在现实场景中即为误报问题。
 
 <p style="text-align:center"><img src="./false-positive.jpg" alt="false-positive" style="zoom:50%;" /></p>
 
-> 在继续推进之前，我们先解释一下积极和消极的含义，对于客观世界来说， $T$ 是积极的， $\overline T$ 是消极的，从 $S$ 的视角来看， $A$ 是积极的， $\overline A$ 是消极的。
+> 在继续推进之前，我们先解释一下阳性和阴性的含义，对于客观世界来说， $T$ 是阳性的， $\overline T$ 是阴性的，从 $S$ 的视角来看， $A$ 是阳性的， $\overline A$ 是阴性的。
 > 
-> 所谓假积极，就是 $S$ 认为的积极其实在客观世界中是消极。类似的，假消极也就可以理解了。
+> 所谓假阳性，就是 $S$ 认为的阳性其实在客观世界中是阴性。类似的，假阴性也就可以理解了。
 
 这里，借用之前的形式化语言，我们其实可以明确的定义出在静态分析中的 False Positive ： 
 
 ::: definition 定义1.5
-记程序 $P$ 的关于性质 $Q$ 的静态分析S有 **假积极（False Positive）** 问题，当且仅当 $S$ 给出的答案 $A$ 和 $P$ 关于 $Q$ 的真相T满足如下关系：
+记程序 $P$ 的关于性质 $Q$ 的静态分析S有 **假阳性（False Positive）** 问题，当且仅当 $S$ 给出的答案 $A$ 和 $P$ 关于 $Q$ 的真相T满足如下关系：
 
 $$
 \exists a \in A, a\notin T
 $$
 
-其中， $a$ 称为一个 **假积极实例（False Positive Instance）** ，其实是一个 **消极实例（Negative Instance）** 。
+其中， $a$ 称为一个 **假阳性实例（False Positive Instance）** ，其实是一个 **阴性实例（Negative Instance）** 。
 :::
 
-- Complete 的静态分析保证了正确性，妥协了完全性，会欠近似（Underapproximate）程序的行为，因此会出现假消极（False Negative）现象，即判定为消极（在 $\overline A$ 中），但实际是积极（在 $T$ 中）。反映在现实场景中即为漏报问题。
+- Complete 的静态分析保证了正确性，妥协了完全性，会欠近似（Underapproximate）程序的行为，因此会出现假阴性（False Negative）现象，即判定为阴性（在 $\overline A$ 中），但实际是阳性（在 $T$ 中）。反映在现实场景中即为漏报问题。
 
 <p style="text-align:center"><img src="./false-negative.jpg" alt="false-negative" style="zoom:50%;" /></p>
 
 和定义1.5类似，我们可以形式化的定义出False Negative：
 
 ::: definition 定义1.6
-记程序 $P$ 的关于性质 $Q$ 的静态分析 $S$ 有 **假消极（False Negative）** 问题，当且仅当 $S$ 给出的答案 $A$ 和 $P$ 关于 $Q$ 的真相 $T$ 满足如下关系：
+记程序 $P$ 的关于性质 $Q$ 的静态分析 $S$ 有 **假阴性（False Negative）** 问题，当且仅当 $S$ 给出的答案 $A$ 和 $P$ 关于 $Q$ 的真相 $T$ 满足如下关系：
 
 $$
 \exists a \notin A, a\in T
 $$
 
-其中， $a$ 称为一个 **假消极实例（False Negative Instance）** ，其实是一个 **积极实例（Positive Instance）** 。
+其中， $a$ 称为一个 **假阴性实例（False Negative Instance）** ，其实是一个 **阳性实例（Positive Instance）** 。
 ::: 
 
 
 ### 1.2.3 现实世界中有用的静态分析
 
-大多数的静态分析会妥协正确性，保证完全性，即 Sound 的静态分析居多，这样的静态分析虽然不是完美的，但是有用的。以 debug 为例，在实际的开发过程中，Sound 的静态分析可以帮助我们有效的缩小 debug 的范围，我们最多只需要暴力排查掉所有的假积极实例（False Positive Instance）就可以了。
+大多数的静态分析会妥协正确性，保证完全性，即 Sound 的静态分析居多，这样的静态分析虽然不是完美的，但是有用的。以 debug 为例，在实际的开发过程中，Sound 的静态分析可以帮助我们有效的缩小 debug 的范围，我们最多只需要暴力排查掉所有的假阳性实例（False Positive Instance）就可以了。
 
-由于假积极实例 $a \in A$ ，所以这个人工排查 $a$ 的代价仍然是可控的，假设暴力排查一个程序点是否为 bug 的平均代价是常数项时间，则排查假积极的代价在 $O(|A|)$ 以内。除非该 Sound 的分析极其不精确，导致 $|A|$ 特别的大，否则 $O(|A|)$ 是一个可以接受的代价，有一点错误的 Warning 问题不大。
+由于假阳性实例 $a \in A$ ，所以这个人工排查 $a$ 的代价仍然是可控的，假设暴力排查一个程序点是否为 bug 的平均代价是常数项时间，则排查假阳性的代价在 $O(|A|)$ 以内。除非该 Sound 的分析极其不精确，导致 $|A|$ 特别的大，否则 $O(|A|)$ 是一个可以接受的代价，有一点错误的 Warning 问题不大。
 
-但是，Complete 的静态分析做不到这一点，它不能够帮助我们有效缩小 debug 的范围。因为假消极实例（False Negative Instance）$a \notin A$ ，所以 $a$ 的范围是 $P - A$ 。这里注意的是，虽然假消极的理论范围是 $T - A$ ，但因为我们并不知道 $T$ 是什么，所以只能从 $P - A$ 中排查。而 $P - A$ 往往是比 $A$ 大得多的，因此排查假消极的代价是很大的。
+但是，Complete 的静态分析做不到这一点，它不能够帮助我们有效缩小 debug 的范围。因为假阴性实例（False Negative Instance）$a \notin A$ ，所以 $a$ 的范围是 $P - A$ 。这里注意的是，虽然假阴性的理论范围是 $T - A$ ，但因为我们并不知道 $T$ 是什么，所以只能从 $P - A$ 中排查。而 $P - A$ 往往是比 $A$ 大得多的，因此排查假阴性的代价是很大的。
 
-除非存在某个 Complete 的静态分析 $S$ ，能够做到 $A$ 接近于 $P$ （这里的 $P$ 理解为整个程序的全集），这样 $P - A$ 会比较小，从而排查假消极的代价就小了。但是 $A \subseteq T \subseteq P$ ，如果要做到让 $A$ 接近于 $P$ ，我们就需要一个 $T$ 接近于 $P$ 的前提条件，因为 Complete 分析下 $A$ 不会超过 $T$ 。
+除非存在某个 Complete 的静态分析 $S$ ，能够做到 $A$ 接近于 $P$ （这里的 $P$ 理解为整个程序的全集），这样 $P - A$ 会比较小，从而排查假阴性的代价就小了。但是 $A \subseteq T \subseteq P$ ，如果要做到让 $A$ 接近于 $P$ ，我们就需要一个 $T$ 接近于 $P$ 的前提条件，因为 Complete 分析下 $A$ 不会超过 $T$ 。
 
-换言之，为了让排除假消极变得容易，需要程序 $P$ 本身就十分符合性质 $Q$ 。但是，如果静态分析 $S$ 对于程序 $P$ 本身提出了 $P$ 接近于 $T$ 的要求，那么我们还要静态分析干嘛呢？
+换言之，为了让排除假阴性变得容易，需要程序 $P$ 本身就十分符合性质 $Q$ 。但是，如果静态分析 $S$ 对于程序 $P$ 本身提出了 $P$ 接近于 $T$ 的要求，那么我们还要静态分析干嘛呢？
 
 我们使用静态分析的原因就是我们做不到写出非常符合 $Q$ 的 $P$ （如果 $Q$ 是一个优良的性质）或者我们根本不会去分析非常符合 $Q$ 的 $P$ （如果 $Q$ 是一个糟糕的性质，那么非常符合 $Q$ 的 $P$ 就是一个非常糟糕的程序，我们需要分析的往往是普通的程序），也就是 $P$ 本身达不到我们的期待，所以才需要静态分析来帮助改进 $P$ 。
 
@@ -242,7 +242,7 @@ z = x + y;
 
 1. 静态分析（Static Analysis）和动态测试（Dynamic Testing）的区别是什么？
 
-2. 完全性（Soundness）、正确性（Completeness）、假积极（False Positives）和假消极（False Negatives）分别是什么含义？
+2. 完全性（Soundness）、正确性（Completeness）、假阳性（False Positives）和假阴性（False Negatives）分别是什么含义？
 
 3. 为什么静态分析通常需要尽可能保证完全性？
 
